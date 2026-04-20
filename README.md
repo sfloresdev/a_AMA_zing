@@ -9,14 +9,14 @@
 ### Ejecución
 
 
-# Algoritmos utilizados
+### Algoritmos utilizados
 - 
-# Por que?
-
-# Que partes son reutilizable y como?
-
-# El equipo y gestion del proyecto
-
+### Por que?
+-
+### Que partes son reutilizable y como?
+-
+### El equipo y gestion del proyecto
+-
 
 # Recursos 
 
