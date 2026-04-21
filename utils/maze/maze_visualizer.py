@@ -36,15 +36,25 @@ class MazeVisualizer:
                 
                 # 2. Paredes
                 elif cell == 1:
-                    line += f"{self.wall_color}██{self.reset_color}"
+                    # Lógica de conexión de líneas
+                    if r % 2 == 0:
+                        if c % 2 == 0:
+                            line += f"{self.wall_color}╋━{self.reset_color}"
+                        else:
+                            line += f"{self.wall_color}━━{self.reset_color}"
+                    else:
+                        if c % 2 == 0:
+                            line += f"{self.wall_color}┃ {self.reset_color}"
+                        else:
+                            line += "  " # Esto no debería pasar si la matriz es 2n+1
 
                 # 3. Entrada
                 elif cell == 'E':
-                    line += "\033[0;32mE\033[0m"
+                    line += "\033[45m  \033[0m"
 
                 # 4. Salida
                 elif cell == 'S':
-                    line += "\033[0;31mS\033[0m"
+                    line += "\033[41m  \033[0m"
 
                 # 5. Pasillos vacíos
                 else:
@@ -57,47 +67,3 @@ class MazeVisualizer:
 
     def create_42_logo(self):
         pass
-
-
-def main() -> None:
-   # Inicializamos configuración y generador
-    config = MazeConfig(width=15, height=10, perfect=False)
-    
-    # Iniciamos generador
-    gen = MazeGenerator(config)
-    gen.generate_maze()
-    
-    # IMPORTANTE: Usamos el "traductor" que mencionamos antes
-    # para convertir objetos Cell en una matriz de 1s y 0s
-    # Iniciamos visualizador
-    maze_viz = MazeVisualizer(gen.get_display_matrix())
-
-    while True:
-        maze_viz.draw()
-        print("\n=== A-Maze-Ing ===")
-        print("1. Re-generate a new maze")
-        print("2. Show/Hide path")
-        print("3. Change colors")
-        print("4. Quit")
-
-        choice = input("\nChoice? (1-4): ")
-
-        if choice == "1":
-            # Aqui vendra backtracking recursivo
-            gen = MazeGenerator(config)
-            gen.generate_maze()
-            maze_viz.update_data(gen.get_display_matrix())
-
-        elif choice == "2":
-            maze_viz.show_path = not maze_viz.show_path
-
-        elif choice == "3":
-            new_color = input("Color (red/green/blue/yellow/white): ").lower()
-            maze_viz.change_color(new_color)
-
-        elif choice == "4":
-            break
-
-
-if __name__ == "__main__":
-    main()

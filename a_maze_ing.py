@@ -35,7 +35,32 @@ def main() -> None:
         
         # Creamos el visualizador y dibujamos
         visualizer = MazeVisualizer(matrix)
-        visualizer.draw()
+
+        while True:
+            visualizer.draw()
+            print("\n=== A-Maze-Ing ===")
+            print("1. Re-generate a new maze")
+            print("2. Show/Hide path")
+            print("3. Change colors")
+            print("4. Quit")
+
+            choice = input("\nChoice? (1-4): ")
+
+            if choice == "1":
+                # Aqui vendra backtracking recursivo
+                gen = MazeGenerator(config)
+                gen.generate_maze()
+                visualizer.update_data(gen.get_display_matrix())
+
+            elif choice == "2":
+                visualizer.show_path = not visualizer.show_path
+
+            elif choice == "3":
+                new_color = input("Color (red/green/blue/yellow/white): ").lower()
+                visualizer.change_color(new_color)
+
+            elif choice == "4":
+                break
 
         print(f"\nLaberinto de {config.width}x{config.height} generado.")
         print(f"Perfecto: {config.perfect} | Entrada: {config.entry} | Salida: {config.exit}")
