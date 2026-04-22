@@ -3,15 +3,9 @@ import sys
 from utils.parser.config_parser import MazeConfig
 from utils.maze.maze_engine import MazeGenerator
 from utils.maze.maze_visualizer import MazeVisualizer
-from test_file import print_pretty_maze
-
-
-def print_console(grid) -> None:
-    print("\n----Test View----")
-    for row in grid:
-        line = "".join(cell.to_hex() for cell in row)
-        print(line)
-    print("-------------------")
+from utils.maze.gen_output_file import export_maze
+from utils.algo.bfs import MazeSolver
+#  from test_file import print_pretty_maze
 
 
 def main() -> None:
@@ -28,11 +22,22 @@ def main() -> None:
         # 2. Generar el laberinto (Lógica)
         generator = MazeGenerator(config)
         generator.generate_maze()
+        grid = generator.get_grid()
+        solver = MazeSolver(grid, config.entry, config.exit)
+        solved_path = solver.solve()
+
+        export_maze(
+            config.outputfile,
+            grid,
+            config.entry,
+            config.exit,
+            solved_path
+        )
 
         # 3. Traducir y Visualizar (Estética)
         # Obtenemos la matriz de bloques (1s y 0s)
         matrix = generator.get_display_matrix()
-        
+
         # Creamos el visualizador y dibujamos
         visualizer = MazeVisualizer(matrix)
 
@@ -56,14 +61,18 @@ def main() -> None:
                 visualizer.show_path = not visualizer.show_path
 
             elif choice == "3":
-                new_color = input("Color (red/green/blue/yellow/white): ").lower()
+                new_color = input(
+                    "Color (red/green/blue/yellow/white): ").lower()
                 visualizer.change_color(new_color)
 
             elif choice == "4":
                 break
 
         print(f"\nLaberinto de {config.width}x{config.height} generado.")
-        print(f"Perfecto: {config.perfect} | Entrada: {config.entry} | Salida: {config.exit}")
+        print(f"Perfecto: {config.perfect} "
+              f"| Entrada: {config.entry} |"
+              f" Salida: {config.exit}"
+              )
 
     except Exception as e:
         print(f"Error: {e}")

@@ -33,7 +33,7 @@ class MazeVisualizer:
                 # 1. Prioridad: Mostrar el camino (Solution Path)
                 if self.show_path and (r, c) in path_coords:
                     line += "\033[0;33m.\033[0m"
-                
+
                 # 2. Paredes
                 elif cell == 1:
                     # Lógica de conexión de líneas
@@ -46,7 +46,8 @@ class MazeVisualizer:
                         if c % 2 == 0:
                             line += f"{self.wall_color}┃ {self.reset_color}"
                         else:
-                            line += "  " # Esto no debería pasar si la matriz es 2n+1
+                            line += "  "
+                            # Esto no debería pasar si la matriz es 2n+1
 
                 # 3. Entrada
                 elif cell == 'E':

@@ -74,9 +74,10 @@ class MazeGenerator:
         # si tiene las dimensiones suficientes, algo asi:
         # self._inject_42_pattern()
 
-
     def get_display_matrix(self) -> list[list]:
-        """ Convierte el grid de objetos Cell en una matriz de 1s, 0s, E y S """
+        """
+        Convierte el grid de objetos Cell en una matriz de 1s, 0s, E y S
+        """
         # Tamaño ampliado para que las paredes ocupen su propia celda
         disp_width = self.width * 2 + 1
         disp_height = self.height * 2 + 1
@@ -93,7 +94,7 @@ class MazeGenerator:
                 # Si no hay pared al sur, abrimos el bloque de abajo
                 if not cell.walls['S'] and y < self.height - 1:
                     matrix[my_y + 1][my_x] = 0
-                
+
                 # Si no hay pared este, abrimos el bloque de la derecha
                 if not cell.walls['E'] and x < self.width - 1:
                     matrix[my_y][my_x + 1] = 0
@@ -103,18 +104,24 @@ class MazeGenerator:
             try:
                 e_y, e_x = self.entry[1] * 2 + 1, self.entry[0] * 2 + 1
                 s_y, s_x = self.exit[1] * 2 + 1, self.exit[0] * 2 + 1
-                
+
                 matrix[e_y][e_x] = 'E'
                 matrix[s_y][s_x] = 'S'
             except IndexError:
                 raise ValueError("Error: The entry or exit is out of bounds.")
-        
-        return matrix
 
+        return matrix
 
     def make_imperfect(self, chance: float = 0.1) -> None:
         """
-        Function that allows us to add more exits to the original maze (by knocking down walls).
+        Function that allows us to add more paths to the original maze
+        (by knocking down walls).
+
+        @Pablo: Esto tiene en cuenta que no se creen zonas de 3x3?
+        te lo comento porque en el subject indica que no puede area
+        de esas dimensiones - pagina 8, punto 4 de la seccion IV.4.
+
+        Y al ser aleatorio se 'podría' romper
         """
         for y in range(self.height - 1):
             for x in range(self.width - 1):
@@ -125,14 +132,19 @@ class MazeGenerator:
                     if random.random() < chance:
                         next_cell = self.grid[y + 1][x]
                         current_cell.remove_wall(next_cell, 'S')
-                
+
                 # Intentar romper hacia el este
-                if y < self.width - 1 and current_cell.walls['E']:
+                if x < self.width - 1 and current_cell.walls['E']:
                     if random.random() < chance:
                         next_cell = self.grid[y][x + 1]
                         current_cell.remove_wall(next_cell, 'E')
 
-    def _inject_42_pattern():
+    def _inject_42_pattern(self):
+        """
+        @Pablo: Además de dibujar el '42' cuando se cumplen unas dimensiones
+        tambien tienes que cerrar las paredes que envuelven al 42, si no la
+        solucion atraviesa el 42
+        """
         pass
 
     def get_grid(self) -> list[list[Cell]]:
