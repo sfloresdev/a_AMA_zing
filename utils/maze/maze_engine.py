@@ -8,6 +8,7 @@ class MazeGenerator:
     def __init__(self, config: MazeConfig) -> None:
         self.width: int = config.width
         self.height: int = config.height
+        self.seed = config.seed
         self.entry: tuple[int, int] = config.entry
         self.exit: tuple[int, int] = config.exit
         self.perfect: bool = config.perfect
@@ -61,6 +62,13 @@ class MazeGenerator:
                 stack.pop()
 
     def generate_maze(self) -> None:
+        """
+        Calls the maze generation method, if a seed is provided
+        it uses the provided seed
+        """
+        if self.seed is not None:
+            random.seed(self.seed)
+
         self._gen_perfect_backtracker()
 
         # self._make_imperfect

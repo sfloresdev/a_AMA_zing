@@ -12,6 +12,7 @@ class MazeConfig:
         self.exit: Tuple[int, int] = (-1, -1)
         self.outputfile: str = ""
         self.perfect: bool = False
+        self.seed: int | None = None
 
         self._parse()
         self._validate()
@@ -38,6 +39,8 @@ class MazeConfig:
                 self.outputfile = value
             elif key == 'PERFECT':
                 self.perfect = value.lower() in ('true', '1', 'yes')
+            elif key == 'SEED':
+                self.seed = int(value)
             else:
                 pass
         except ValueError:
