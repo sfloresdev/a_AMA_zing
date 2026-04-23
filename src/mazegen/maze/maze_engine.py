@@ -78,7 +78,9 @@ class MazeGenerator:
     def get_display_matrix(self) -> list[list]:
         disp_width = self.width * 2 + 1
         disp_height = self.height * 2 + 1
-        matrix = [[1 for _ in range(disp_width)] for _ in range(disp_height)]
+        matrix: list[list[int | str]] = [
+            [1 for _ in range(disp_width)] for _ in range(disp_height)
+        ]
 
         for y in range(self.height):
             for x in range(self.width):
@@ -90,10 +92,14 @@ class MazeGenerator:
                 if getattr(cell, 'is_in_pattern', False):
                     matrix[my_y][my_x] = 'P'
                     # Conectar logo hacia el sur
-                    if y < self.height - 1 and getattr(self.grid[y+1][x], 'is_in_pattern', False):
+                    if y < self.height - 1 and getattr(
+                        self.grid[y+1][x], 'is_in_pattern', False
+                    ):
                         matrix[my_y + 1][my_x] = 'P'
                     # Conectar logo hacia el este
-                    if x < self.width - 1 and getattr(self.grid[y][x+1], 'is_in_pattern', False):
+                    if x < self.width - 1 and getattr(
+                        self.grid[y][x+1], 'is_in_pattern', False
+                    ):
                         matrix[my_y][my_x + 1] = 'P'
                 else:
                     if matrix[my_y][my_x] != 'P':
@@ -102,11 +108,15 @@ class MazeGenerator:
                 # Lógica de paredes normales (solo si no somos logo)
                 if not getattr(cell, 'is_in_pattern', False):
                     if not cell.walls['S'] and y < self.height - 1:
-                        if not getattr(self.grid[y+1][x], 'is_in_pattern', False):
+                        if not getattr(
+                            self.grid[y+1][x], 'is_in_pattern', False
+                        ):
                             matrix[my_y + 1][my_x] = 0
 
                     if not cell.walls['E'] and x < self.width - 1:
-                        if not getattr(self.grid[y][x+1], 'is_in_pattern', False):
+                        if not getattr(
+                            self.grid[y][x+1], 'is_in_pattern', False
+                        ):
                             matrix[my_y][my_x + 1] = 0
 
         # Colocar Entrada y Salida
@@ -163,12 +173,16 @@ class MazeGenerator:
 
                 if y < self.height - 1 and current_cell.walls['S']:
                     next_cell = self.grid[y + 1][x]
-                    if not getattr(next_cell, 'is_in_pattern', False) and random.random() < chance:
+                    if not getattr(
+                        next_cell, 'is_in_pattern', False
+                    ) and random.random() < chance:
                         current_cell.remove_wall(next_cell, 'S')
 
                 if x < self.width - 1 and current_cell.walls['E']:
                     next_cell = self.grid[y][x + 1]
-                    if not getattr(next_cell, 'is_in_pattern', False) and random.random() < chance:
+                    if not getattr(
+                        next_cell, 'is_in_pattern', False
+                    ) and random.random() < chance:
                         current_cell.remove_wall(next_cell, 'E')
 
     def get_grid(self) -> list[list[Cell]]:

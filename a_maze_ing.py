@@ -91,14 +91,7 @@ def main() -> None:
                     config.exit,
                     solved_path
                 )
-                print(f"Maze exported to {config.outputfile}. Goodbye!")
                 break
-
-        print(f"\nMaze {config.width}x{config.height} generated.")
-        print(f"Perfect: {config.perfect} "
-              f"| Entry: {config.entry} |"
-              f" Exit: {config.exit}"
-              )
 
     except Exception as e:
         print(f"Error: {e}")
