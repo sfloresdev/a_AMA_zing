@@ -1,5 +1,5 @@
 
-from utils.maze.cell import Cell
+from mazegen.maze.cell import Cell
 
 
 def export_maze(
