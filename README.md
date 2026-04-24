@@ -159,7 +159,7 @@ a-maze-ing/
         └── bfs.py             # MazeSolver (BFS)
 ```
 
-## API Principal
+## Clases Principales
 
 ### `MazeGenerator`
 ```python
@@ -229,7 +229,6 @@ make build      # Genera distribución con setuptools
 
 - **Visualización**: Usa códigos ANSI (colores) y caracteres Unicode Heavy (paredes gruesas)
   - Puede no renderizar correctamente en terminales limitadas o Windows CMD nativo
-  - Recomendado: WSL, Linux, macOS, o Windows Terminal
 
 - **Logo "42"**: Se inyecta como bloque sólido preservado; requiere min. 11×9 celdas
 
@@ -265,7 +264,3 @@ gen.generate_maze()
 Este proyecto ha sido desarrollado con ayuda de herramientas de IA para:
 - Optimización de algoritmos
 - Refactorización y mejora de legibilidad
-
----
-
-**Última actualización**: Abril 2026

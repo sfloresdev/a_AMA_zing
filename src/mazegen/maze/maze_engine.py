@@ -108,7 +108,7 @@ class MazeGenerator:
                     if matrix[my_y][my_x] != 'P':
                         matrix[my_y][my_x] = 0
 
-                # Normal walls logic 
+                # Normal walls logic
                 if not getattr(cell, 'is_in_pattern', False):
                     if not cell.walls['S'] and y < self.height - 1:
                         if not getattr(
@@ -126,16 +126,16 @@ class MazeGenerator:
         try:
             entry_cell = self.grid[self.entry[1]][self.entry[0]]
             exit_cell = self.grid[self.exit[1]][self.exit[0]]
-            
+
             if getattr(entry_cell, 'is_in_pattern', False):
                 raise ValueError("Entry can't be in logo space")
-            
+
             if getattr(exit_cell, 'is_in_pattern', False):
                 raise ValueError("Exit can't be in logo space")
-            
+
             e_y, e_x = self.entry[1] * 2 + 1, self.entry[0] * 2 + 1
             matrix[e_y][e_x] = 'E'
-            
+
             s_y, s_x = self.exit[1] * 2 + 1, self.exit[0] * 2 + 1
             matrix[s_y][s_x] = 'S'
         except IndexError:
@@ -145,9 +145,11 @@ class MazeGenerator:
 
     def _inject_42_pattern(self) -> None:
         """
-        Inyecta un '42' en el centro. Al marcar las celdas como 'visited',
-        el algoritmo de generación no las pisará ni romperá sus paredes,
-        creando un bloque macizo alrededor.
+        Injects the '42' pattern in the center.
+        Al marcar las celdas como 'visited'.
+        By changing the Cells as visited the generation algo
+        wont break his walls or overwrite them, creating a maze
+        block around him
         """
         # Minimum width and height needed for the '42' logo
         if self.width < 11 or self.height < 9:

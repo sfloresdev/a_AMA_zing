@@ -73,7 +73,8 @@ def main() -> None:
                 generator.generate_maze()
 
                 # Updates solution path
-                solver = MazeSolver(generator.get_grid(), config.entry, config.exit)
+                solver = MazeSolver(
+                    generator.get_grid(), config.entry, config.exit)
                 solved_path = solver.solve()
                 path_coords = solver.get_path_coords(solved_path)
 
