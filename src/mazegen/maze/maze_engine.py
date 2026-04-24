@@ -77,7 +77,7 @@ class MazeGenerator:
 
     def get_display_matrix(self) -> list[list]:
         """
-        @Pablo
+        Returns the grid in a matrix structure (list[list])
         """
         disp_width = self.width * 2 + 1
         disp_height = self.height * 2 + 1
@@ -91,7 +91,7 @@ class MazeGenerator:
                 my_y = y * 2 + 1
                 my_x = x * 2 + 1
 
-                # Lógica del Logo P
+                # Pattern logic
                 if getattr(cell, 'is_in_pattern', False):
                     matrix[my_y][my_x] = 'P'
                     # Conectar logo hacia el sur
@@ -108,7 +108,7 @@ class MazeGenerator:
                     if matrix[my_y][my_x] != 'P':
                         matrix[my_y][my_x] = 0
 
-                # Lógica de paredes normales (solo si no somos logo)
+                # Normal walls logic 
                 if not getattr(cell, 'is_in_pattern', False):
                     if not cell.walls['S'] and y < self.height - 1:
                         if not getattr(

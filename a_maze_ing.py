@@ -62,7 +62,7 @@ def main() -> None:
             if choice == "1":
                 # IMPORTANT: When regenerated,
                 # the whole logic process needs to be repeated
-                gen = MazeGenerator(
+                generator = MazeGenerator(
                     width=config.width,
                     height=config.height,
                     entry=config.entry,
@@ -70,15 +70,15 @@ def main() -> None:
                     perfect=config.perfect,
                     seed=config.seed
                 )
-                gen.generate_maze()
+                generator.generate_maze()
 
                 # Updates solution path
-                solver = MazeSolver(gen.get_grid(), config.entry, config.exit)
+                solver = MazeSolver(generator.get_grid(), config.entry, config.exit)
                 solved_path = solver.solve()
                 path_coords = solver.get_path_coords(solved_path)
 
                 # Updates the matrix
-                visualizer.update_data(gen.get_display_matrix())
+                visualizer.update_data(generator.get_display_matrix())
 
             elif choice == "2":
                 visualizer.show_path = not visualizer.show_path
