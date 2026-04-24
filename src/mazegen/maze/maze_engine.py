@@ -124,12 +124,22 @@ class MazeGenerator:
 
         # Colocar Entrada y Salida
         try:
+            entry_cell = self.grid[self.entry[1]][self.entry[0]]
+            exit_cell = self.grid[self.exit[1]][self.exit[0]]
+            
+            if getattr(entry_cell, 'is_in_pattern', False):
+                raise ValueError("Entry can't be in logo space")
+            
+            if getattr(exit_cell, 'is_in_pattern', False):
+                raise ValueError("Exit can't be in logo space")
+            
             e_y, e_x = self.entry[1] * 2 + 1, self.entry[0] * 2 + 1
-            s_y, s_x = self.exit[1] * 2 + 1, self.exit[0] * 2 + 1
             matrix[e_y][e_x] = 'E'
+            
+            s_y, s_x = self.exit[1] * 2 + 1, self.exit[0] * 2 + 1
             matrix[s_y][s_x] = 'S'
         except IndexError:
-            pass
+            raise ValueError("Entry/Exit coordinates out of bounds")
 
         return matrix
 
