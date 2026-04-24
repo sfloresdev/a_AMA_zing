@@ -2,5 +2,6 @@
 __pycache__/
 .mypy_cache/
 
-# Virtual environment folder
+# Virtual environment folder and dist/ folder
 env/
+dist/

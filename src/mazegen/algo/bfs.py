@@ -1,7 +1,7 @@
 
 from collections import deque
 from typing import Optional
-from src.mazegen.maze.cell import Cell
+from mazegen.maze.cell import Cell
 
 
 class MazeSolver:
