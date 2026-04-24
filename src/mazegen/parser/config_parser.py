@@ -14,6 +14,8 @@ class MazeConfig:
         self.perfect: bool = False
         self.seed: int | None = None
 
+        self.seen_keys: set[str] = set()
+
         self._parse()
         self._validate()
 
@@ -21,6 +23,23 @@ class MazeConfig:
     @Sergio verificar todo el parseo (revisar chat de @Pablo)
     """
     def _assign_value(self, key: str, value: str, line_num: int) -> None:
+
+        if key in self.seen_keys:
+            raise ValueError(
+                f"Syntax error in line {line_num}: Duplicate key '{key}'"
+                f"Each key must be defined only once"
+                )
+
+        valid_keys = {
+            'WIDTH', 'HEIGHT',
+            'ENTRY', 'EXIT',
+            'OUTPUT_FILE', 'PERFECT', 'SEED'
+        }
+        if key not in valid_keys:
+            raise ValueError(
+                f"Syntax error in line {line_num}: Unknown key '{key}'."
+                )
+        self.seen_keys.add(key)
         value = value.strip('"\'')
 
         try:
@@ -39,16 +58,28 @@ class MazeConfig:
                     raise ValueError(f"EXIT requires 2 values, got {value}")
                 self.exit = (int(parts[0].strip()), int(parts[1].strip()))
             elif key == 'OUTPUT_FILE':
+                if not value.endswith(".txt"):
+                    raise ValueError(
+                        f"OUTPUT_FILE must end with '.txt', got '{value}'"
+                    )
                 self.outputfile = value
             elif key == 'PERFECT':
-                self.perfect = value.lower() in ('true', '1', 'yes')
+                val_lower = value.lower()
+                if val_lower == 'true':
+                    self.perfect = True
+                elif val_lower == 'false':
+                    self.perfect = False
+                else:
+                    raise ValueError(
+                        f"PERFECT must be 'True' or 'False', got '{value}'"
+                        )
             elif key == 'SEED':
                 self.seed = int(value)
-            else:
-                pass
-        except ValueError:
+        except ValueError as e:
+            if "end" in str(e) or "requires" in str(e) or "must be" in str(e):
+                raise ValueError(f"Syntax error in line {line_num}: {e}")
             raise ValueError(
-                f"Error: Invalid value for {key} in line {line_num}")
+                f"Invalid value for {key} in line {line_num}")
 
     def _parse(self) -> None:
         if not os.path.isfile(self.filepath):
@@ -57,26 +88,42 @@ class MazeConfig:
 
         with open(self.filepath, 'r', encoding='utf-8') as file:
             for num, line in enumerate(file, 1):
-                line = line.strip()
+                og_line = line.strip('\n\r')
+                line = og_line.strip()
                 if not line or line.startswith("#"):
                     continue
-                if '=' not in line:
+                if line.count('=') != 1:
                     raise ValueError(
-                        f"Syntax error in line {num}. Missing '='")
+                        f"Syntax error in line {num}."
+                        f" Must follow strict 'KEY=VALUE' format"
+                        )
 
-                key, value = line.split('=', 1)
-                key = key.strip()
-                value = value.strip()
+                key, value = line.split('=')
+                if key != key.strip() or value != value.strip() or ' ' in key:
+                    raise ValueError(
+                        f"Syntax error in line {num}: Spaces not allowed"
+                        f" around '=' or inside the key."
+                    )
 
                 self._assign_value(key, value, num)
 
     def _validate(self) -> None:
+        required_keys = {
+            'WIDTH', 'HEIGHT',
+            'ENTRY', 'EXIT',
+            'OUTPUT_FILE', 'PERFECT'
+        }
+        missing = required_keys - self.seen_keys
+        if missing:
+            raise ValueError(
+                "Syntax error: Missing mandatory key in config file"
+                f"-> {', '.join(missing)}"
+            )
+
         if self.width <= 0 or self.height <= 0:
             raise ValueError("Error: WIDTH and HEIGHT must be (> 0)")
-        if self.entry == (-1, -1) or self.exit == (-1, -1):
-            raise ValueError("Error: ENTRY and EXIT coordinates are missing")
-        if not self.outputfile:
-            raise ValueError("Error: Missing OUTPUT_FILE specificator")
+        # if not self.outputfile:
+        #    raise ValueError("Error: Missing OUTPUT_FILE specificator")
         if self.entry == self.exit:
             raise ValueError("Error: Both entry and exit can't be equal")
         valid_x = 0 <= self.entry[0] < self.width

@@ -165,12 +165,40 @@ class MazeGenerator:
             cell.visited = True
             cell.is_in_pattern = True
 
+    def _would_create_2x2(self, x: int, y: int, direction: str) -> bool:
+        """
+        Checks if by destroying the wall in the current position,
+        creates an area wider than 2x2 by asking their neighbours
+        """
+        c = self.grid[y][x]
+
+        if direction == 'S':
+            s = self.grid[y + 1][x]
+            if x < self.width - 1:
+                e = self.grid[y][x + 1]
+                if not c.walls['E'] and not e.walls['S'] and not s.walls['E']:
+                    return True
+            if x > 0:
+                w = self.grid[y][x - 1]
+                if not c.walls['W'] and not w.walls['S'] and not s.walls['W']:
+                    return True
+        elif direction == 'E':
+            e = self.grid[y][x + 1]
+            if y < self.width - 1:
+                s = self.grid[y + 1][x]
+                if not c.walls['S'] and not s.walls['E'] and not e.walls['S']:
+                    return True
+            if y > 0:
+                n = self.grid[y - 1][x]
+                if not c.walls['N'] and not n.walls['E'] and not e.walls['N']:
+                    return True
+        return False
+
     def make_imperfect(self, chance: float = 0.1) -> None:
         """
-        Takes the original grid and takes down random walls
-        respecting the 3x3 forbidden open area
-        Args:
-            chance:
+        Takes the original grid and takes down random walls.
+        It prevents the creation of 2x2 open areas, also
+        respecting the '42' logo
         """
         for y in range(self.height - 1):
             for x in range(self.width - 1):
@@ -185,14 +213,16 @@ class MazeGenerator:
                     if not getattr(
                         next_cell, 'is_in_pattern', False
                     ) and random.random() < chance:
-                        current_cell.remove_wall(next_cell, 'S')
+                        if not self._would_create_2x2(x, y, 'S'):
+                            current_cell.remove_wall(next_cell, 'S')
 
                 if x < self.width - 1 and current_cell.walls['E']:
                     next_cell = self.grid[y][x + 1]
                     if not getattr(
                         next_cell, 'is_in_pattern', False
                     ) and random.random() < chance:
-                        current_cell.remove_wall(next_cell, 'E')
+                        if not self._would_create_2x2(x, y, 'E'):
+                            current_cell.remove_wall(next_cell, 'E')
 
     def get_grid(self) -> list[list[Cell]]:
         """

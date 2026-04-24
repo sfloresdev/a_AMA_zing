@@ -7,10 +7,10 @@
 **A-Maze-Ing** es una librería Python que genera y resuelve laberintos perfectos e imperfectos utilizando algoritmos eficientes de backtracking y búsqueda. Un laberinto perfecto es aquel que contiene un único camino entre la entrada y la salida.
 
 El proyecto demuestra la implementación modular de:
-- 🎲 Generación de laberintos (con inyección de un patrón "42")
-- 🔍 Resolución mediante BFS (Breadth-First Search)
-- 🎨 Visualización en consola con colores ANSI y caracteres Unicode
-- ⚙️ Exportación a ficheros y parseo de configuración
+- Generación de laberintos (con inyección de un patrón "42")
+- Resolución mediante BFS (Breadth-First Search)
+- Visualización en consola con colores ANSI y caracteres Unicode
+- Exportación a ficheros y parseo de configuración
 
 ## Características
 
