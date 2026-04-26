@@ -1,6 +1,6 @@
 # A-Maze-Ing
 
-*This project has been created as part of the 42 curriculum by **sefloresone** and **Pabloms63**.*
+*This project has been created as part of the 42 curriculum by **sfloresone** and **Pabloms63**.*
 
 ## Description
 
@@ -115,7 +115,7 @@ PERFECT=True
 ## Project management
 
 ### Team
-- **sefloresone**: Initial development, project architecture and documentation
+- **sfloresone**: Initial development, project architecture and documentation
 - **Pabloms63**: Optimization, visualizer and documentation
 
 ### Quality management
