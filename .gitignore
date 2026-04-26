@@ -5,3 +5,4 @@ __pycache__/
 # Virtual environment folder and dist/ folder
 env/
 dist/
+.zed/

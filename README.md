@@ -1,99 +1,99 @@
 # A-Maze-Ing
 
-*Proyecto desarrollado como parte del currículo de 42 por **seflores** y **pmarcos-**.*
+*This project has been created as part of the 42 curriculum by **sefloresone** and **Pabloms63**.*
 
-## Descripción
+## Description
 
-**A-Maze-Ing** es una librería Python que genera y resuelve laberintos perfectos e imperfectos utilizando algoritmos eficientes de backtracking y búsqueda. Un laberinto perfecto es aquel que contiene un único camino entre la entrada y la salida.
+**A-Maze-Ing** is a Python library designed to generate and solve both perfect and imperfect mazes using backtracking and search algorithms. A perfect maze is defined as one containing exactly one unique path between the entry and exit.
 
-El proyecto demuestra la implementación modular de:
-- Generación de laberintos (con inyección de un patrón "42")
-- Resolución mediante BFS (Breadth-First Search)
-- Visualización en consola con colores ANSI y caracteres Unicode
-- Exportación a ficheros y parseo de configuración
+This project demonstrates a modular architecture of:
+- Maze Generation: with and extra feature (injection of a custom "42" pattern).
+- Pathfinding: BFS (Breadth-First Search).
+- Visualizer: Using ANSI and Unicode characters.
+- File Handling: Exporting the results to files and parsing configuration inputs.
 
-## Características
+## Characteristics
 
-- **Generador modular**: Crea laberintos de cualquier tamaño con entrada/salida configurables
-- **Logo 42 integrado**: Inyecta un patrón visual "42" preservado durante la generación
-- **Laberintos perfectos e imperfectos**: Control total sobre la topología
-- **BFS**: Encuentra la ruta óptima desde entrada a salida
-- **Visualización interactiva**: Muestra/oculta la solución, cambia colores, regenera el laberinto
-- **Exportación**: Guarda laberintos en ficheros de texto con coordenadas de solución
+- **Modular generator**: Creates mazes of any size with configurable entry and exit points.
+- **42 logo integration**: Injects a custom "42" pattern if there is enough space.
+- **BFS**: Finds the shortest path between entry and exit.
+- **Interactive Menu**: Shows/Hides path, colour changing, regenerates maze
+- **Export System**: Saves the maze in a *.txt* file, including the solution path.
 
-## Instalación
+## Installation
 
-### Requisitos previos
+### Prerequisites
 - Python 3.10+
 - pip
 
-### Paso a paso
+> [!WARNING]
+> **Important:** I **strongly** recommend using virtual environments to avoid *Makefile* errors or *permission* errors.
+
+### Don't know how to create one? Don't worry...
+
+Follow this steps in order to create one, it's very easy:
+
+- 1. Open your terminal at the root of the project and write this
 
 ```bash
-# 1. Clonar o descargar el proyecto
-cd a-maze-ing
+# 1.
+python3 -m venv env
+```
 
-# 2. Instalar dependencias (incluye flake8 y mypy)
+- 2. Activate the virtual environment
+
+```bash
+# 2.
+source env/bin/activate
+```
+
+- 3. You're ready to go
+
+
+### Project compilation, step-by-step
+
+```bash
+# 1. Install dependencies
 make install
 
-# O manualmente:
+# Or manually install it:
 python3 -m pip install -r requirements.txt
 python3 -m pip install -e . --no-build-isolation
 ```
 
-## Uso
+## Use
 
-### Modo interactivo
+### Interactive mode
 
 ```bash
 make run
 ```
 
-O ejecutar directamente:
+### And voilà, there is your beautiful maze
 
-```bash
-PYTHONPATH=src python3 a_maze_ing.py config.txt
-```
+![Final Maze Result](public/maze-generation.png)
 
-**Menú interactivo:**
-- `1` - Regenerar un nuevo laberinto
-- `2` - Mostrar/ocultar la solución
-- `3` - Cambiar color de paredes
-- `4` - Salir (exporta automáticamente)
+**Interactive menu (Sorry it's in Spanish) :**
+- `1` - Generate new maze
+- `2` - Shows/hides path
+- `3` - Change walls colours
+- `4` - Exit
 
-### Como librería
+### Show path
 
-```python
-from mazegen import MazeGenerator, MazeSolver, MazeVisualizer
+![Final Path](public/path-solution.png)
 
-# 1. Generar laberinto
-generator = MazeGenerator(
-    width=20, 
-    height=15, 
-    entry=(0, 0), 
-    exit_pos=(19, 14),
-    perfect=True,
-    seed=42
-)
-generator.generate_maze()
+### Change colours
 
-# 2. Resolver
-solver = MazeSolver(generator.get_grid(), (0, 0), (19, 14))
-path = solver.solve()
-coords = solver.get_path_coords(path)
+![Final Change Colours](public/change-color.png)
 
-# 3. Visualizar
-matrix = generator.get_display_matrix()
-viz = MazeVisualizer(matrix)
-viz.show_path = True
-viz.draw(coords)
-```
+### As a library
 
-Ver también [`test_package.py`](test_package.py) para un ejemplo completo.
+See [`test_package.py`](test/test_package.py) for an example.
 
-## Configuración
+## The famous config file
 
-Archivo `config.txt`:
+File `config.txt`:
 
 ```plaintext
 WIDTH=50
@@ -104,163 +104,68 @@ OUTPUT_FILE=output_maze.txt
 PERFECT=True
 ```
 
-**Parámetros:**
-- `WIDTH`, `HEIGHT`: Dimensiones del laberinto
-- `ENTRY`: Entrada como `x,y`
-- `EXIT`: Salida como `x,y`
-- `PERFECT`: `True` para laberintos perfectos, `False` para imperfectos
-- `OUTPUT_FILE`: Ruta del fichero de exportación
+**Parameters:**
+- `WIDTH`, `HEIGHT`: Maze dimensions
+- `ENTRY`: Entry as `x,y`
+- `EXIT`: Exit as `x,y`
+- `PERFECT`: `True` for perfect mazes, `False` imperfect ones.
+- `OUTPUT_FILE`: Output file path, only `.txt`
 
-## Algoritmos utilizados
 
-### Generación: Recursive Backtracking
-- **Complejidad**: O(width × height)
-- **Ventaja**: Genera laberintos perfectos (árbol de expansión)
-- **Procedimiento**:
-  1. Comenzar desde la entrada
-  2. Visitar celdas vecinas no visitadas al azar
-  3. Marcar como visitadas y remover paredes
-  4. Backtrackear cuando no hay vecinos disponibles
+## Project management
 
-### Resolución: BFS (Breadth-First Search)
-- **Complejidad**: O(width × height)
-- **Ventaja**: Garantiza encontrar el camino más corto
-- **Procedimiento**:
-  1. Inicializar cola con la entrada
-  2. Explorar todos los vecinos de cada celda
-  3. Marcar visitados para evitar ciclos
-  4. Reconstruir camino desde salida hacia entrada
+### Team
+- **sefloresone**: Initial development, project architecture and documentation
+- **Pabloms63**: Optimization, visualizer and documentation
 
-### Imperfección controlada
-- Añade bucles a un laberinto perfecto con probabilidad configurable
-- Preserva el logo "42" intacto
-
-## Estructura del proyecto
-
-```
-a-maze-ing/
-├── a_maze_ing.py              # Punto de entrada (modo interactivo)
-├── config.txt                 # Configuración de ejemplo
-├── test_package.py            # Ejemplo de uso como librería
-├── output_maze.txt            # Salida de ejemplo
-├── Makefile                   # Automatización
-├── requirements.txt           # Dependencias
-├── pyproject.toml             # Metadatos del paquete
-└── src/mazegen/
-    ├── __init__.py            # Exporta clases públicas
-    ├── parser/
-    │   └── config_parser.py   # Parseo de config.txt
-    ├── maze/
-    │   ├── cell.py            # Clase Cell (celda del laberinto)
-    │   ├── maze_engine.py     # MazeGenerator
-    │   ├── maze_visualizer.py # MazeVisualizer
-    │   └── gen_output_file.py # Exportación a fichero
-    └── algo/
-        └── bfs.py             # MazeSolver (BFS)
-```
-
-## Clases Principales
-
-### `MazeGenerator`
-```python
-MazeGenerator(width, height, entry, exit_pos, perfect=False, seed=None)
-- generate_maze()          → Genera el laberinto
-- get_grid()               → Devuelve lista de Cell
-- get_display_matrix()     → Devuelve matriz de visualización (1s, 0s, 'E', 'S', 'P')
-```
-
-### `MazeSolver`
-```python
-MazeSolver(grid, entry, exit)
-- solve()                  → Devuelve string de movimientos (N/S/E/W)
-- get_path_coords(path)    → Devuelve set de (x, y) del camino
-```
-
-### `MazeVisualizer`
-```python
-MazeVisualizer(maze_data)
-- draw(path_coords)        → Dibuja en consola
-- show_path                → Propiedad booleana
-- change_color(name)       → Cambia color de paredes
-- update_data(new_maze)    → Actualiza matriz
-```
-
-## Partes reutilizables
-
-- **`MazeGenerator`**: Independiente, sin dependencias internas (solo Cell)
-  - Reutilizar: `gen = MazeGenerator(...); gen.generate_maze()`
-  
-- **`MazeSolver`**: Requiere un `grid` de `Cell`, retorna rutas
-  - Reutilizar: `solver = MazeSolver(grid, entry, exit); path = solver.solve()`
-  
-- **`MazeVisualizer`**: Recibe matriz numérica/simbólica
-  - Reutilizar: `viz = MazeVisualizer(matrix); viz.draw(path_coords)`
-  
-- **`MazeConfig`**: Parsea ficheros `.txt` con formato clave=valor
-  - Reutilizar: `config = MazeConfig("config.txt")`
-
-Todas las clases están en el namespace `mazegen` importable tras instalar.
-
-## Gestión del proyecto
-
-### Equipo
-- **seflores**: Desarrollo inicial y arquitectura
-- **pmarcos-**: Optimización, visualización y documentación
-
-### Control de calidad
+### Quality management
 
 ```bash
-# Linting y type checking
-make lint       # Ejecuta flake8 + mypy
+# Clean generated
+make clean      # Deletes __pycache__, dist/, .mypy_cache
 
-# Limpiar generados
-make clean      # Elimina __pycache__, dist/, .mypy_cache
-
-# Construcción
-make build      # Genera distribución con setuptools
+# Build
+make build      # Distribution with setuptools
 ```
 
-**Estándares aplicados:**
-- PEP 8 (flake8)
-- Type hints con mypy
-- Modularidad según estándares de 42
+## Technical notes
 
-## Notas técnicas
+- **Visualizer**: ANSI colors (colores) and heavy Unicode (paredes gruesas)
+  - Cannot render in limited terminals or native Windows CMD
 
-- **Visualización**: Usa códigos ANSI (colores) y caracteres Unicode Heavy (paredes gruesas)
-  - Puede no renderizar correctamente en terminales limitadas o Windows CMD nativo
+- **"42" Logo**: Requires min. 11×9 cells
 
-- **Logo "42"**: Se inyecta como bloque sólido preservado; requiere min. 11×9 celdas
+- **Output format**: Coordinates + Entry/Exit tuples + path (N/S/E/W) in plain text
 
-- **Formato de salida**: Coordenadas + movimientos (N/S/E/W) en texto plano
+![Final Change Colours](public/output-file.png)
 
-## Ejemplos rápidos
+## Also...
 
-### Generar laberinto 10×10 perfecto
-```bash
-echo "WIDTH=10\nHEIGHT=10\nENTRY=0,0\nEXIT=9,9\nPERFECT=True" > mini.txt
-PYTHONPATH=src python3 a_maze_ing.py mini.txt
-```
-
-### Generar con seed reproducible
+### You can generate the maze using a reproducible seed
 ```python
-gen = MazeGenerator(20, 20, (0, 0), (19, 19), seed=12345)
+gen = MazeGenerator(20, 20, (0, 0), (19, 19), seed=42)
 gen.generate_maze()
-# Mismo seed → mismo laberinto siempre
 ```
 
-## Recursos
+```plaintext
+WIDTH=50
+HEIGHT=50
+ENTRY=1,3
+EXIT=24,14
+OUTPUT_FILE=output_maze.txt
+PERFECT=True
+SEED=42
+```
 
-- **Algoritmos**:
+## Resources
+
+- **Algorithms**:
   - [Recursive Backtracking](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_backtracker)
   - [BFS Pathfinding](https://en.wikipedia.org/wiki/Breadth-first_search)
 
-- **Documentación interna**: Docstrings en cada módulo
+- **Internal documentation**: Docstrings in each module
 
-- **Validación**: Script `output_validator.py` disponible para validar exportaciones
+## AI Usage
 
-## Uso de IA
-
-Este proyecto ha sido desarrollado con ayuda de herramientas de IA para:
-- Optimización de algoritmos
-- Refactorización y mejora de legibilidad
+- Project documentation
+- Refactoring
